@@ -60,12 +60,59 @@ void listarProdutos() {
 
     fclose(arquivo);
 }
+void alterarEstoque(int tipo) {
+    int codigo, quantidade, encontrado = 0;
+    Produto p;
+
+    FILE *arquivo = fopen("data/produtos.dat", "rb+");
+
+    if (!arquivo) {
+        printf("Arquivo não encontrado.\n");
+        return;
+    }
+
+    printf("Código do produto: ");
+    scanf("%d", &codigo);
+
+    while (fread(&p, sizeof(Produto), 1, arquivo)) {
+        if (p.codigo == codigo) {
+            encontrado = 1;
+            printf("\nProduto encontrado:\n");
+            exibirProduto(p);
+
+            printf("\nQuantidade para %s: ", tipo == 1 ? "entrada" : "saída");
+            scanf("%d", &quantidade);
+
+            if (tipo == 1) {
+                p.quantidade += quantidade;
+            } else {
+                if (quantidade > p.quantidade) {
+                    printf("Erro: Estoque insuficiente.\n");
+                    fclose(arquivo);
+                    return;
+                }
+                p.quantidade -= quantidade;
+            }
+
+            fseek(arquivo, -sizeof(Produto), SEEK_CUR);
+            fwrite(&p, sizeof(Produto), 1, arquivo);
+            printf("\nEstoque atualizado com sucesso!\n");
+            break;
+        }
+    }
+
+    if (!encontrado) {
+        printf("Produto não encontrado.\n");
+    }
+
+    fclose(arquivo);
+}
 
 int main() {
     int opcao;
 
     do {
-        printf("\n1 - Cadastrar Produto\n2 - Listar Produtos\n0 - Sair\nOpção: ");
+        printf("\n1 - Cadastrar Produto\n2 - Listar Produtos\n3 - Entrada de Produto\n4 - Saída de Produto\n0 - Sair\nOpção: ");
         scanf("%d", &opcao);
         getchar(); // limpar buffer
 
@@ -76,7 +123,12 @@ int main() {
             case 2:
                 listarProdutos();
                 break;
-            
+            case 3:
+                alterarEstoque(1);
+                break;
+            case 4:
+                alterarEstoque(2);
+                break;           
             case 0:
                 printf("Encerrando...\n");
                 break;
