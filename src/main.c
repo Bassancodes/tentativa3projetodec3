@@ -171,7 +171,17 @@ int main() {
     int opcao;
 
     do {
-        printf("\n1 - Cadastrar Produto\n2 - Consultar Produtos\n3 - Entrada de Produto\n4 - Saída de Produto\n5 - Gerar Relatório\n0 - Sair\nOpção: ");
+        printf("\n========================================\n");
+        printf("      SISTEMA DE ESTOQUE DO HENRIQUE    \n");
+        printf("========================================\n");
+        printf(" 1 - Cadastrar novo produto\n");
+        printf(" 2 - Consultar produto (nome ou código)\n");
+        printf(" 3 - Registrar entrada de produto\n");
+        printf(" 4 - Registrar saída de produto\n");
+        printf(" 5 - Gerar relatório ( relatorio.txt) \n");
+        printf(" 0 - Sair do sistema\n");
+        printf("----------------------------------------\n");
+        printf(" Escolha uma opção: ");
         scanf("%d", &opcao);
         getchar(); // limpar buffer
 
@@ -187,17 +197,17 @@ int main() {
                 break;
             case 4:
                 alterarEstoque(2);
-                break;  
+                break;
             case 5:
                 gerarRelatorio();
                 break;
-                     
             case 0:
-                printf("Encerrando...\n");
+                printf("\nEncerrando o sistema...\n");
                 break;
             default:
-                printf("Opção inválida.\n");
+                printf("\nOpção inválida! Por favor, tente novamente.\n");
         }
+
     } while (opcao != 0);
 
     return 0;
