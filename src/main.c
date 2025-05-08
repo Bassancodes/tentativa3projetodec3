@@ -43,12 +43,29 @@ void exibirProduto(Produto p) {
     printf("Quantidade: %d\n", p.quantidade);
     printf("Preço: R$ %.2f\n", p.preco);
 }
+void listarProdutos() {
+    FILE *arquivo = fopen("data/produtos.dat", "rb");
+    Produto p;
+
+    if (!arquivo) {
+        printf("Nenhum produto encontrado.\n");
+        return;
+    }
+
+    printf("\n--- Lista de Produtos ---\n");
+
+    while (fread(&p, sizeof(Produto), 1, arquivo)) {
+        exibirProduto(p);
+    }
+
+    fclose(arquivo);
+}
 
 int main() {
     int opcao;
 
     do {
-        printf("\n1 - Cadastrar Produto\n0 - Sair\nOpção: ");
+        printf("\n1 - Cadastrar Produto\n2 - Listar Produtos\n0 - Sair\nOpção: ");
         scanf("%d", &opcao);
         getchar(); // limpar buffer
 
@@ -56,6 +73,10 @@ int main() {
             case 1:
                 cadastrarProduto();
                 break;
+            case 2:
+                listarProdutos();
+                break;
+            
             case 0:
                 printf("Encerrando...\n");
                 break;
