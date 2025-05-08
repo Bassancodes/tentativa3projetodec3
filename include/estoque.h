@@ -11,5 +11,6 @@ typedef struct {
 
 void cadastrarProduto();
 void exibirProduto(Produto p);
+void listarProdutos();
 
 #endif
