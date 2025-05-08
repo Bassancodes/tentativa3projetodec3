@@ -1,0 +1,5 @@
+Relatório de Estoque
+
+Código    Nome                 Qtd        Preço     Total       
+123        PAO                  25         R$ 2.00     R$ 50.00   
+1          garrafa de agua      100        R$ 4.00     R$ 400.00  

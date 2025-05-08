@@ -107,12 +107,36 @@ void alterarEstoque(int tipo) {
 
     fclose(arquivo);
 }
+void gerarRelatorio() {
+    FILE *entrada = fopen("data/produtos.dat", "rb");
+    FILE *saida = fopen("data/relatorio.txt", "w");
+    Produto p;
+
+    if (!entrada || !saida) {
+        printf("Erro ao abrir os arquivos.\n");
+        return;
+    }
+
+    fprintf(saida, "Relatório de Estoque\n\n");
+    fprintf(saida, "%-10s %-20s %-10s %-10s %-12s\n", "Código", "Nome", "Qtd", "Preço", "Total");
+
+    while (fread(&p, sizeof(Produto), 1, entrada)) {
+        float total = p.quantidade * p.preco;
+        fprintf(saida, "%-10d %-20s %-10d R$ %-8.2f R$ %-8.2f\n", p.codigo, p.nome, p.quantidade, p.preco, total);
+    }
+
+    fclose(entrada);
+    fclose(saida);
+
+    printf("\nRelatório gerado com sucesso: data/relatorio.txt\n");
+}
+
 
 int main() {
     int opcao;
 
     do {
-        printf("\n1 - Cadastrar Produto\n2 - Listar Produtos\n3 - Entrada de Produto\n4 - Saída de Produto\n0 - Sair\nOpção: ");
+        printf("\n1 - Cadastrar Produto\n2 - Listar Produtos\n3 - Entrada de Produto\n4 - Saída de Produto\n5 - Gerar Relatório\n0 - Sair\nOpção: ");
         scanf("%d", &opcao);
         getchar(); // limpar buffer
 
@@ -128,7 +152,11 @@ int main() {
                 break;
             case 4:
                 alterarEstoque(2);
-                break;           
+                break;  
+            case 5:
+                gerarRelatorio();
+                break;
+                     
             case 0:
                 printf("Encerrando...\n");
                 break;
