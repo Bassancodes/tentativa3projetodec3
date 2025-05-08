@@ -43,23 +43,58 @@ void exibirProduto(Produto p) {
     printf("Quantidade: %d\n", p.quantidade);
     printf("Preço: R$ %.2f\n", p.preco);
 }
-void listarProdutos() {
-    FILE *arquivo = fopen("data/produtos.dat", "rb");
+void consultarEstoque() {
+    int opcao;
+    int codigoBusca;
+    char nomeBusca[50];
     Produto p;
+    int encontrado = 0;
+
+    FILE *arquivo = fopen("data/produtos.dat", "rb");
 
     if (!arquivo) {
-        printf("Nenhum produto encontrado.\n");
+        printf("Arquivo não encontrado.\n");
         return;
     }
 
-    printf("\n--- Lista de Produtos ---\n");
+    printf("\nConsultar por:\n1 - Código\n2 - Nome\nOpção: ");
+    scanf("%d", &opcao);
+    getchar(); // limpar buffer
 
-    while (fread(&p, sizeof(Produto), 1, arquivo)) {
-        exibirProduto(p);
+    if (opcao == 1) {
+        printf("Informe o código do produto: ");
+        scanf("%d", &codigoBusca);
+
+        while (fread(&p, sizeof(Produto), 1, arquivo)) {
+            if (p.codigo == codigoBusca) {
+                exibirProduto(p);
+                encontrado = 1;
+                break;
+            }
+        }
+
+    } else if (opcao == 2) {
+        printf("Informe o nome do produto: ");
+        fgets(nomeBusca, sizeof(nomeBusca), stdin);
+        nomeBusca[strcspn(nomeBusca, "\n")] = 0;
+
+        while (fread(&p, sizeof(Produto), 1, arquivo)) {
+            if (strcmp(p.nome, nomeBusca) == 0) {
+                exibirProduto(p);
+                encontrado = 1;
+            }
+        }
+
+    } else {
+        printf("Opção inválida.\n");
     }
+
+    if (!feof(arquivo) && !encontrado)
+        printf("Produto não encontrado.\n");
 
     fclose(arquivo);
 }
+
 void alterarEstoque(int tipo) {
     int codigo, quantidade, encontrado = 0;
     Produto p;
@@ -136,7 +171,7 @@ int main() {
     int opcao;
 
     do {
-        printf("\n1 - Cadastrar Produto\n2 - Listar Produtos\n3 - Entrada de Produto\n4 - Saída de Produto\n5 - Gerar Relatório\n0 - Sair\nOpção: ");
+        printf("\n1 - Cadastrar Produto\n2 - Consultar Produtos\n3 - Entrada de Produto\n4 - Saída de Produto\n5 - Gerar Relatório\n0 - Sair\nOpção: ");
         scanf("%d", &opcao);
         getchar(); // limpar buffer
 
@@ -145,7 +180,7 @@ int main() {
                 cadastrarProduto();
                 break;
             case 2:
-                listarProdutos();
+                consultarEstoque();
                 break;
             case 3:
                 alterarEstoque(1);

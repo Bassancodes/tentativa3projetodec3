@@ -11,7 +11,7 @@ typedef struct {
 
 void cadastrarProduto();
 void exibirProduto(Produto p);
-void listarProdutos();
+void consultarEstoque();
 void alterarEstoque(int tipo); 
 void gerarRelatorio();
 
