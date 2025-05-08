@@ -13,5 +13,7 @@ void cadastrarProduto();
 void exibirProduto(Produto p);
 void listarProdutos();
 void alterarEstoque(int tipo); 
+void gerarRelatorio();
+
 
 #endif
